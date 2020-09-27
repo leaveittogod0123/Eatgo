@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 public class RestaurantTest {
     @Test
     public void create() {
-        Restaurant restaurant = new Restaurant("Bob zip", "Seoul");
+        Restaurant restaurant = new Restaurant(1004L,"Bob zip", "Seoul");
 
         assertThat(restaurant.getName(), is("Bob zip"));
         assertThat(restaurant.getAddress(), is("Seoul"));
@@ -16,7 +16,7 @@ public class RestaurantTest {
 
     @Test
     public void information() {
-        Restaurant restaurant = new Restaurant("Bob zip", "Seoul");
+        Restaurant restaurant = new Restaurant(1004L, "Bob zip", "Seoul");
 
         assertThat(restaurant.getInformation(), is("Bob zip in Seoul"));
     }
