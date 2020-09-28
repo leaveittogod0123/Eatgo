@@ -1,5 +1,6 @@
 package com.playground.noyo0123.eatgo.interfaces;
 
+import com.playground.noyo0123.eatgo.application.RestaurantService;
 import com.playground.noyo0123.eatgo.domain.MenuItemRepository;
 import com.playground.noyo0123.eatgo.domain.MenuItemRepositoryImpl;
 import com.playground.noyo0123.eatgo.domain.RestaurantRepository;
@@ -23,6 +24,9 @@ public class RestaurantControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @SpyBean(RestaurantService.class)
+    private RestaurantService restaurantService;
 
     @SpyBean(RestaurantRepositoryImpl.class) // 컨트롤러에 객체 주입이 가능함 (어떤 구현체를 사용할 것인지)?
     private RestaurantRepository restaurantRepository;

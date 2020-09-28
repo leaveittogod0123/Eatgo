@@ -1,5 +1,6 @@
 package com.playground.noyo0123.eatgo.interfaces;
 
+import com.playground.noyo0123.eatgo.application.RestaurantService;
 import com.playground.noyo0123.eatgo.domain.MenuItem;
 import com.playground.noyo0123.eatgo.domain.MenuItemRepository;
 import com.playground.noyo0123.eatgo.domain.Restaurant;
@@ -16,27 +17,17 @@ import java.util.List;
 public class RestaurantController {
 
     @Autowired
-    private RestaurantRepository restaurantRepository;
-
-    @Autowired
-    private MenuItemRepository menuItemRepository;
+    private RestaurantService restaurantService;
 
     @GetMapping("/restaurants")
     public List<Restaurant> list() {
-
-        List<Restaurant> restaurants = restaurantRepository.findAll();
-
+        List<Restaurant> restaurants = restaurantService.getRestaurants();
         return restaurants;
     }
 
     @GetMapping("/restaurants/{id}")
     public Restaurant detail(@PathVariable Long id) {
 
-        Restaurant restaurant = restaurantRepository.findById(id);
-
-        List<MenuItem> menuItems = menuItemRepository.findAllByRestaurantId(id);
-        restaurant.setMenuItems(menuItems);
-
-        return restaurant;
+        return restaurantService.getRestaurant(id);
     }
 }

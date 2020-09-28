@@ -8,7 +8,7 @@ import java.util.List;
 @Component
 public class RestaurantRepositoryImpl implements RestaurantRepository {
 
-    private List<Restaurant> restaurants = new ArrayList<>();
+    private final List<Restaurant> restaurants = new ArrayList<>();
 
     public RestaurantRepositoryImpl(){
         restaurants.add(new Restaurant(1004L,"Bob zip", "Seoul"));
