@@ -1,9 +1,14 @@
 package com.playground.noyo0123.eatgo.interfaces;
 
+import com.playground.noyo0123.eatgo.domain.MenuItemRepository;
+import com.playground.noyo0123.eatgo.domain.MenuItemRepositoryImpl;
+import com.playground.noyo0123.eatgo.domain.RestaurantRepository;
+import com.playground.noyo0123.eatgo.domain.RestaurantRepositoryImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -18,6 +23,12 @@ public class RestaurantControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @SpyBean(RestaurantRepositoryImpl.class) // 컨트롤러에 객체 주입이 가능함 (어떤 구현체를 사용할 것인지)?
+    private RestaurantRepository restaurantRepository;
+
+    @SpyBean(MenuItemRepositoryImpl.class)
+    private MenuItemRepository menuItemRepository;
 
     @Test
     public void list() throws Exception {
@@ -38,6 +49,9 @@ public class RestaurantControllerTest {
                         containsString("Bob zip")))
                 .andExpect(content().string(
                         containsString("\"id\":1004")
+                ))
+                .andExpect(content().string(
+                        containsString("Kimchi")
                 ));
 
         mvc.perform(get("/restaurants/2020"))
