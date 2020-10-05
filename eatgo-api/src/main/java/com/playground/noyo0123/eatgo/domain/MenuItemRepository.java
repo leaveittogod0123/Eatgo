@@ -1,11 +1,10 @@
 package com.playground.noyo0123.eatgo.domain;
 
-import com.playground.noyo0123.eatgo.domain.Restaurant;
-import org.springframework.stereotype.Component;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface MenuItemRepository {
+public interface MenuItemRepository extends CrudRepository<MenuItem, Long> {
 
     List<MenuItem> findAllByRestaurantId(Long id);
 }
