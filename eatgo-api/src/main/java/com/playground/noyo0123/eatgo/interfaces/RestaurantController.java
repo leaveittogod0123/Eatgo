@@ -6,12 +6,12 @@ import com.playground.noyo0123.eatgo.domain.MenuItemRepository;
 import com.playground.noyo0123.eatgo.domain.Restaurant;
 import com.playground.noyo0123.eatgo.domain.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
@@ -32,6 +32,16 @@ public class RestaurantController {
         return restaurantService.getRestaurant(id);
     }
 
-//    @PostMapping("/restaurants")
-//    public Res
+    @PostMapping("/restaurants")
+    public ResponseEntity<?> create(@RequestBody Restaurant resource ) throws URISyntaxException { // JSON으로 응답할거기때문에 ResponseEntity
+
+        String name = resource.getName();
+        String address = resource.getAddress();
+        Restaurant restaurant = new Restaurant(name, address);
+        restaurantService.addRestaurant(restaurant);
+        
+        
+        URI uri = new URI("/restaurants/" + restaurant.getId());
+        return ResponseEntity.created(uri).body("{}"); // JSON으로 넘겨줌
+    }
 }

@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 public class RestaurantServiceTest {
@@ -49,7 +51,8 @@ public class RestaurantServiceTest {
         restaurants.add(restaurant);
         given(restaurantRepository.findAll()).willReturn(restaurants);
 
-        given(restaurantRepository.findById(1004L)).willReturn(java.util.Optional.of(restaurant));
+        given(restaurantRepository.findById(1004L)).willReturn(Optional.of(restaurant));
+
     }
 
     @Test
@@ -72,5 +75,12 @@ public class RestaurantServiceTest {
         assertThat(menuItem.getName(), is("Kimchi"));
     }
 
-
+    @Test
+    public void addRestaurant() {
+        Restaurant restaurant = new Restaurant("BeRyong", "Busan");
+        Restaurant saved = new Restaurant(1234L, "BeRyong", "Busan");
+        given(restaurantRepository.save(any())).willReturn(restaurant);
+        Restaurant created = restaurantService.addRestaurant(restaurant);
+//        assertThat(created.getId(), is(1234L));
+    }
 }
