@@ -1,22 +1,27 @@
 package com.playground.noyo0123.eatgo.interfaces;
 
 import com.playground.noyo0123.eatgo.application.RestaurantService;
-import com.playground.noyo0123.eatgo.domain.MenuItemRepository;
-import com.playground.noyo0123.eatgo.domain.MenuItemRepositoryImpl;
-import com.playground.noyo0123.eatgo.domain.RestaurantRepository;
-import com.playground.noyo0123.eatgo.domain.RestaurantRepositoryImpl;
+import com.playground.noyo0123.eatgo.domain.MenuItem;
+import com.playground.noyo0123.eatgo.domain.Restaurant;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.hamcrest.core.StringContains.containsString;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(RestaurantController.class) // Restaurant 클래스를 web mvc로 테스트한다.
@@ -25,21 +30,24 @@ public class RestaurantControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @SpyBean(RestaurantService.class)
+    @MockBean(RestaurantService.class)
     private RestaurantService restaurantService;
-
-    @SpyBean(RestaurantRepositoryImpl.class) // 컨트롤러에 객체 주입이 가능함 (어떤 구현체를 사용할 것인지)?
-    private RestaurantRepository restaurantRepository;
-
-    @SpyBean(MenuItemRepositoryImpl.class)
-    private MenuItemRepository menuItemRepository;
 
     @Test
     public void list() throws Exception {
+        List<Restaurant> restaurants = new ArrayList<Restaurant>();
+        restaurants.add(Restaurant.builder()
+            .id(1004L)
+            .name("JOKER House")
+            .address("Seoul")
+            .build());
+
+        given(restaurantService.getRestaurants()).willReturn(restaurants);
+
         mvc.perform(get("/restaurants")) // perform은 예외가 있음.
                 .andExpect(status().isOk())
                 .andExpect(content().string(
-                        containsString("Bob zip")))
+                        containsString("\"name\":\"JOKER House\"")))
                 .andExpect(content().string(
                         containsString("\"id\":1004")
                 ));
@@ -47,10 +55,31 @@ public class RestaurantControllerTest {
 
     @Test
     public void detail() throws Exception {
+
+        Restaurant restaurant = Restaurant.builder()
+                .id(1004L)
+                .name("Joker House")
+                .address("Seoul")
+                .build();
+
+        MenuItem menuItem = MenuItem.builder()
+                .name("Kimchi")
+                .build();
+        restaurant.setMenuItems(Arrays.asList(menuItem));
+
+        Restaurant restaurant2 = Restaurant.builder()
+                .id(2020L)
+                .name("Cyber food")
+                .address("Busan")
+                .build();
+
+        given(restaurantService.getRestaurant(1004L)).willReturn(restaurant);
+        given(restaurantService.getRestaurant(2020L)).willReturn(restaurant2);
+
         mvc.perform(get("/restaurants/1004"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
-                        containsString("Bob zip")))
+                        containsString("JOKER House")))
                 .andExpect(content().string(
                         containsString("\"id\":1004")
                 ))
@@ -67,4 +96,60 @@ public class RestaurantControllerTest {
                 ));
 
     }
+
+
+    @Test
+    public void createWithValidData() throws Exception {
+
+        given(restaurantService.addRestaurant(any())).will(invocation -> {
+            Restaurant restaurant = invocation.getArgument(0);
+            return Restaurant.builder()
+                    .id(1234L)
+                    .name(restaurant.getName())
+                    .address(restaurant.getAddress())
+                    .build();
+        });
+
+
+        mvc.perform(post("/restaurants")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"BeRyong\", \"address\":\"Busan\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("location", "/restaurants/1234"))
+                .andExpect(content().string("{}"));
+
+        verify(restaurantService).addRestaurant(any());
+    }
+
+    @Test
+    public void createWithInValidData() throws Exception {
+
+        mvc.perform(post("/restaurants")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"\", \"address\":\"\"}"))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    public void updateWithValidData() throws Exception {
+        mvc.perform(patch("/restaurants/1004")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"JOKER Bar\", \"address\": \"Busan\"}"))
+                .andExpect(status().isOk());
+
+        verify(restaurantService).updateRestaurant(1L, "JOKER Bar", "Busan");
+    }
+
+    @Test
+    public void updateWithInValidData() throws Exception {
+        mvc.perform(patch("/restaurants/1004")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"\", \"address\": \"\"}"))
+                .andExpect(status().isBadRequest());
+
+    }
+
+
+
 }

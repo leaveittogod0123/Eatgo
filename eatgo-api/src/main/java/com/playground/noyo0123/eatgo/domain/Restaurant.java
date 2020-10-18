@@ -1,32 +1,35 @@
 package com.playground.noyo0123.eatgo.domain;
 
+import lombok.*;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 public class Restaurant {
-    private final Long id;
-    private final String name;
-    private final String address;
-    private List<MenuItem> menuItems = new ArrayList<MenuItem>();
 
-    public Restaurant(Long id, String name, String address) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-    }
+    @Id
+    @GeneratedValue
+    @Setter
+    private Long id;
 
-    public Long getId() {
-        return this.id;
-    }
+    @NotEmpty
+    private String name;
 
-    public String getName() {
-        return this.name;
-    }
+    @NotEmpty
+    private String address;
 
-    public String getAddress() {
-        return this.address;
-    }
+    @Transient
+    private List<MenuItem> menuItems;
 
     public String getInformation() {
         return this.name + " in " + this.address;
@@ -36,13 +39,12 @@ public class Restaurant {
         return this.menuItems;
     }
 
-    public void addMenuItem(MenuItem menuItem) {
-        this.menuItems.add(menuItem);
+    public void setMenuItems(List<MenuItem> menuItems) {
+        this.menuItems = new ArrayList<>(menuItems);
     }
 
-    public void setMenuItems(List<MenuItem> menuItems) {
-        for(MenuItem menuItem: menuItems){
-            this.addMenuItem(menuItem);
-        }
+    public void updateInformation(String name, String address) {
+        this.name = name;
+        this.address = address;
     }
 }
