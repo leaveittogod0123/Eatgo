@@ -1,9 +1,6 @@
 package com.playground.noyo0123.eatgo.application;
 
-import com.playground.noyo0123.eatgo.domain.MenuItem;
-import com.playground.noyo0123.eatgo.domain.MenuItemRepository;
-import com.playground.noyo0123.eatgo.domain.Restaurant;
-import com.playground.noyo0123.eatgo.domain.RestaurantRepository;
+import com.playground.noyo0123.eatgo.domain.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -75,7 +72,7 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void getRestaurant() {
+    public void getRestaurantWithExisted() {
         Restaurant restaurant = restaurantService.getRestaurant(1004L);
 
         assertThat(restaurant.getId(), is(1004L));
@@ -83,6 +80,11 @@ public class RestaurantServiceTest {
         MenuItem menuItem = restaurant.getMenuItems().get(0);
 
         assertThat(menuItem.getName(), is("Kimchi"));
+    }
+
+    @Test(expected = RestaurantNotFoundException.class)
+    public void getRestaurantWithNotExisted() {
+        restaurantService.getRestaurant(1004L);
     }
 
     @Test
