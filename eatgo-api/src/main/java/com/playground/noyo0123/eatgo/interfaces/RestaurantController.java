@@ -1,19 +1,17 @@
 package com.playground.noyo0123.eatgo.interfaces;
 
 import com.playground.noyo0123.eatgo.application.RestaurantService;
-import com.playground.noyo0123.eatgo.domain.MenuItem;
-import com.playground.noyo0123.eatgo.domain.MenuItemRepository;
 import com.playground.noyo0123.eatgo.domain.Restaurant;
-import com.playground.noyo0123.eatgo.domain.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 public class RestaurantController {
 
@@ -33,15 +31,24 @@ public class RestaurantController {
     }
 
     @PostMapping("/restaurants")
-    public ResponseEntity<?> create(@RequestBody Restaurant resource ) throws URISyntaxException { // JSON으로 응답할거기때문에 ResponseEntity
+    public ResponseEntity<?> create(@Valid @RequestBody Restaurant resource ) throws URISyntaxException { // JSON으로 응답할거기때문에 ResponseEntity
 
-        String name = resource.getName();
-        String address = resource.getAddress();
-        Restaurant restaurant = new Restaurant(name, address);
+        Restaurant restaurant = Restaurant.builder()
+                .name(resource.getName())
+                .address(resource.getAddress())
+                .build();
         restaurantService.addRestaurant(restaurant);
         
         
-        URI uri = new URI("/restaurants/" + restaurant.getId());
-        return ResponseEntity.created(uri).body("{}"); // JSON으로 넘겨줌
+        URI location = new URI("/restaurants/" + restaurant.getId());
+        return ResponseEntity.created(location).body("{}"); // JSON으로 넘겨줌
+    }
+
+    @PatchMapping("/restaurants/{id}")
+    public String update(@PathVariable("id") Long id, @Valid @RequestBody Restaurant restaurant){
+        String name = restaurant.getName();
+        String address = restaurant.getAddress();
+        restaurantService.updateRestaurant(id, name, address);
+        return "{}";
     }
 }

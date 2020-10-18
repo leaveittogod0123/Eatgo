@@ -1,13 +1,15 @@
 package com.playground.noyo0123.eatgo.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class MenuItem {
 
@@ -18,12 +20,4 @@ public class MenuItem {
     private Long restaurantId;
 
     private String name;
-
-    public MenuItem(String name){
-        this.name = name;
-    }
-
-    public String getName(){
-        return this.name;
-    }
 }

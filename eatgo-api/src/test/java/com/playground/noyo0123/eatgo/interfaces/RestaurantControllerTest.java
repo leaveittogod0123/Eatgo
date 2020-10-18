@@ -2,21 +2,18 @@ package com.playground.noyo0123.eatgo.interfaces;
 
 import com.playground.noyo0123.eatgo.application.RestaurantService;
 import com.playground.noyo0123.eatgo.domain.MenuItem;
-import com.playground.noyo0123.eatgo.domain.MenuItemRepository;
 import com.playground.noyo0123.eatgo.domain.Restaurant;
-import com.playground.noyo0123.eatgo.domain.RestaurantRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.core.StringContains.containsString;
@@ -36,23 +33,21 @@ public class RestaurantControllerTest {
     @MockBean(RestaurantService.class)
     private RestaurantService restaurantService;
 
-//    @SpyBean(RestaurantRepositoryImpl.class) // 컨트롤러에 객체 주입이 가능함 (어떤 구현체를 사용할 것인지)?
-//    private RestaurantRepository restaurantRepository;
-//
-//    @SpyBean(MenuItemRepositoryImpl.class)
-//    private MenuItemRepository menuItemRepository;
-
     @Test
     public void list() throws Exception {
+        List<Restaurant> restaurants = new ArrayList<Restaurant>();
+        restaurants.add(Restaurant.builder()
+            .id(1004L)
+            .name("JOKER House")
+            .address("Seoul")
+            .build());
 
-        List<Restaurant> restaurants = new ArrayList<>();
-        restaurants.add(new Restaurant(1004L, "Bob zip", "Seoul"));
         given(restaurantService.getRestaurants()).willReturn(restaurants);
 
         mvc.perform(get("/restaurants")) // perform은 예외가 있음.
                 .andExpect(status().isOk())
                 .andExpect(content().string(
-                        containsString("Bob zip")))
+                        containsString("\"name\":\"JOKER House\"")))
                 .andExpect(content().string(
                         containsString("\"id\":1004")
                 ));
@@ -61,10 +56,24 @@ public class RestaurantControllerTest {
     @Test
     public void detail() throws Exception {
 
-        Restaurant restaurant = new Restaurant(1004L, "JOKER House", "Seoul");
-        restaurant.addMenuItem(new MenuItem("Kimchi"));
+        Restaurant restaurant = Restaurant.builder()
+                .id(1004L)
+                .name("Joker House")
+                .address("Seoul")
+                .build();
+
+        MenuItem menuItem = MenuItem.builder()
+                .name("Kimchi")
+                .build();
+        restaurant.setMenuItems(Arrays.asList(menuItem));
+
+        Restaurant restaurant2 = Restaurant.builder()
+                .id(2020L)
+                .name("Cyber food")
+                .address("Busan")
+                .build();
+
         given(restaurantService.getRestaurant(1004L)).willReturn(restaurant);
-        Restaurant restaurant2 = new Restaurant(2020L, "Cyber food", "Busan");
         given(restaurantService.getRestaurant(2020L)).willReturn(restaurant2);
 
         mvc.perform(get("/restaurants/1004"))
@@ -88,10 +97,18 @@ public class RestaurantControllerTest {
 
     }
 
-    @Test
-    public void create() throws Exception {
 
-        Restaurant restaurant = new Restaurant(1234L, "BeRyong", "Seoul");
+    @Test
+    public void createWithValidData() throws Exception {
+
+        given(restaurantService.addRestaurant(any())).will(invocation -> {
+            Restaurant restaurant = invocation.getArgument(0);
+            return Restaurant.builder()
+                    .id(1234L)
+                    .name(restaurant.getName())
+                    .address(restaurant.getAddress())
+                    .build();
+        });
 
 
         mvc.perform(post("/restaurants")
@@ -101,15 +118,38 @@ public class RestaurantControllerTest {
                 .andExpect(header().string("location", "/restaurants/1234"))
                 .andExpect(content().string("{}"));
 
-        verify(restaurantService).addRestaurant(any()); // 아무거나 넣어서 테스트하기 위해서 any() 사용
+        verify(restaurantService).addRestaurant(any());
     }
 
-//    @Test
-//    public void update() throws Exception {
-//        mvc.perform(patch("/restaruants/1004")
-//            .contentType(MediaType.APPLICATION_JSON)
-//                .content("{\"name\":\"JOKER BAR\", \"address\": \"Busan\"}"))
-//                .andExpect(status().isOk());
-//
-//    }
+    @Test
+    public void createWithInValidData() throws Exception {
+
+        mvc.perform(post("/restaurants")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"\", \"address\":\"\"}"))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    public void updateWithValidData() throws Exception {
+        mvc.perform(patch("/restaurants/1004")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"JOKER Bar\", \"address\": \"Busan\"}"))
+                .andExpect(status().isOk());
+
+        verify(restaurantService).updateRestaurant(1L, "JOKER Bar", "Busan");
+    }
+
+    @Test
+    public void updateWithInValidData() throws Exception {
+        mvc.perform(patch("/restaurants/1004")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"\", \"address\": \"\"}"))
+                .andExpect(status().isBadRequest());
+
+    }
+
+
+
 }
