@@ -4,6 +4,7 @@ import com.playground.noyo0123.eatgo.application.RestaurantService;
 import com.playground.noyo0123.eatgo.domain.MenuItem;
 import com.playground.noyo0123.eatgo.domain.Restaurant;
 import com.playground.noyo0123.eatgo.domain.RestaurantNotFoundException;
+import com.playground.noyo0123.eatgo.domain.Review;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,7 @@ public class RestaurantControllerTest {
 
         Restaurant restaurant = Restaurant.builder()
                 .id(1004L)
-                .name("Joker House")
+                .name("JOKER House")
                 .address("Seoul")
                 .build();
 
@@ -67,15 +68,15 @@ public class RestaurantControllerTest {
                 .name("Kimchi")
                 .build();
         restaurant.setMenuItems(Arrays.asList(menuItem));
-
-        Restaurant restaurant2 = Restaurant.builder()
-                .id(2020L)
-                .name("Cyber food")
-                .address("Busan")
+        Review review = Review.builder()
+                .name("JOKER")
+                .score(5)
+                .description("Great!")
                 .build();
 
+        restaurant.setReviews(Arrays.asList(review));
+
         given(restaurantService.getRestaurant(1004L)).willReturn(restaurant);
-        given(restaurantService.getRestaurant(2020L)).willReturn(restaurant2);
 
         mvc.perform(get("/restaurants/1004"))
                 .andExpect(status().isOk())
@@ -86,15 +87,10 @@ public class RestaurantControllerTest {
                 ))
                 .andExpect(content().string(
                         containsString("Kimchi")
-                ));
-
-        mvc.perform(get("/restaurants/2020"))
-                .andExpect(status().isOk())
+                ))
                 .andExpect(content().string(
-                        containsString("Cyber food")))
-                .andExpect(content().string(
-                        containsString("\"id\":2020")
-                ));
+                containsString("Great!")
+        ));
 
     }
 
