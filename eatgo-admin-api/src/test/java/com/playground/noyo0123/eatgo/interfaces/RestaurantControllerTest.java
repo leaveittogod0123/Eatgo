@@ -99,7 +99,7 @@ public class RestaurantControllerTest {
         });
 
 
-        mvc.perform(post("/restaurants")
+        mvc.perform(post("/restaurants/1234")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"BeRyong\", \"address\":\"Busan\"}"))
                 .andExpect(status().isCreated())
@@ -126,7 +126,7 @@ public class RestaurantControllerTest {
                 .content("{\"name\":\"JOKER Bar\", \"address\": \"Busan\"}"))
                 .andExpect(status().isOk());
 
-        verify(restaurantService).updateRestaurant(1L, "JOKER Bar", "Busan");
+        verify(restaurantService).updateRestaurant(1004L, "JOKER Bar", "Busan");
     }
 
     @Test
