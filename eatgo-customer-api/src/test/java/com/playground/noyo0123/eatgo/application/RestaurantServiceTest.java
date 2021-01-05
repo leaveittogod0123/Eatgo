@@ -1,6 +1,5 @@
 package com.playground.noyo0123.eatgo.application;
 
-import com.playground.noyo0123.eatgo.application.RestaurantService;
 import com.playground.noyo0123.eatgo.domain.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -107,9 +107,11 @@ public class RestaurantServiceTest {
         assertThat(review.getDescription(), is("Bad"));
     }
 
-    @Test(expected = RestaurantNotFoundException.class)
+    @Test
     public void getRestaurantWithNotExisted() {
-        restaurantService.getRestaurant(1004L);
+        assertThatThrownBy(() -> {
+            restaurantService.getRestaurant(404L);
+        }).isInstanceOf(RestaurantNotFoundException.class);
     }
 
     @Test
