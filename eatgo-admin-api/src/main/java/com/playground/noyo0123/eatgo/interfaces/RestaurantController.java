@@ -33,12 +33,11 @@ public class RestaurantController {
     @PostMapping("/restaurants")
     public ResponseEntity<?> create(@Valid @RequestBody Restaurant resource ) throws URISyntaxException { // JSON으로 응답할거기때문에 ResponseEntity
 
-        Restaurant restaurant = Restaurant.builder()
-                .name(resource.getName())
-                .address(resource.getAddress())
-                .build();
-        restaurantService.addRestaurant(restaurant);
-        
+        Restaurant restaurant =  restaurantService.addRestaurant(
+                Restaurant.builder()
+                        .name(resource.getName())
+                        .address(resource.getAddress())
+                        .build());
         
         URI location = new URI("/restaurants/" + restaurant.getId());
         return ResponseEntity.created(location).body("{}"); // JSON으로 넘겨줌

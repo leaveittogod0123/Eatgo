@@ -18,15 +18,16 @@ public class RestaurantService {
         this.restaurantRepository = restaurantRepository;
     }
 
+    public List<Restaurant> getRestaurants() {
+        return restaurantRepository.findAll();
+    }
+
+
     public Restaurant getRestaurant (Long id) {
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new RestaurantNotFoundException(id));
 
         return restaurant;
-    }
-
-    public List<Restaurant> getRestaurants() {
-        return restaurantRepository.findAll();
     }
 
 
@@ -37,7 +38,6 @@ public class RestaurantService {
     @Transactional
     public Restaurant updateRestaurant(long id, String name, String address) {
         // TODO: update Restaurants...
-
 
         Restaurant restaurant =  restaurantRepository.findById(id).orElse(null);
         restaurant.updateInformation(name, address);

@@ -10,12 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 public class RestaurantServiceTest {
 
@@ -71,9 +70,20 @@ public class RestaurantServiceTest {
 
     }
 
-    @Test(expected = RestaurantNotFoundException.class)
+//    @Test(expected = RestaurantNotFoundException.class)
+//    public void getRestaurantWithNotExisted() {
+////        restaurantService.getRestaurant(1004L);
+//
+//        assertThatThrownBy(() -> {
+//            restaurantService.getRestaurant(404L);
+//        }).isInstanceOf(RestaurantNotFoundException.class);
+//    }
+
+    @Test
     public void getRestaurantWithNotExisted() {
-        restaurantService.getRestaurant(1004L);
+        assertThatThrownBy(() -> {
+            restaurantService.getRestaurant(404L);
+        }).isInstanceOf(RestaurantNotFoundException.class);
     }
 
     @Test
