@@ -99,7 +99,7 @@ public class RestaurantControllerTest {
         });
 
 
-        mvc.perform(post("/restaurants/1234")
+        mvc.perform(post("/restaurants")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"BeRyong\", \"address\":\"Busan\"}"))
                 .andExpect(status().isCreated())
