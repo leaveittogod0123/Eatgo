@@ -5,13 +5,11 @@ import com.playground.noyo0123.eatgo.domain.MenuItem;
 import com.playground.noyo0123.eatgo.domain.Restaurant;
 import com.playground.noyo0123.eatgo.domain.RestaurantNotFoundException;
 import com.playground.noyo0123.eatgo.domain.Review;
-import com.playground.noyo0123.eatgo.interfaces.RestaurantController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -41,13 +39,14 @@ public class RestaurantControllerTest {
         List<Restaurant> restaurants = new ArrayList<Restaurant>();
         restaurants.add(Restaurant.builder()
             .id(1004L)
+            .categoryId(1L)
             .name("JOKER House")
             .address("Seoul")
             .build());
 
-        given(restaurantService.getRestaurants()).willReturn(restaurants);
+        given(restaurantService.getRestaurants("Seoul",1L)).willReturn(restaurants);
 
-        mvc.perform(get("/restaurants")) // perform은 예외가 있음.
+        mvc.perform(get("/restaurants?region=Seoul&category=1")) // perform은 예외가 있음.
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"name\":\"JOKER House\"")))
