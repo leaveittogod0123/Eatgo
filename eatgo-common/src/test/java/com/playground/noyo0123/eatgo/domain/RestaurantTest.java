@@ -22,7 +22,7 @@ public class RestaurantTest {
     public void information() {
         Restaurant restaurant = Restaurant.builder()
                 .id(1004L)
-                .name("BobZip")
+                .name("Bob zip")
                 .address("Seoul")
                 .build();
 
