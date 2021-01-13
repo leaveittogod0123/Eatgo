@@ -39,13 +39,14 @@ public class RestaurantControllerTest {
         List<Restaurant> restaurants = new ArrayList<Restaurant>();
         restaurants.add(Restaurant.builder()
             .id(1004L)
+            .categoryId(1L)
             .name("JOKER House")
             .address("Seoul")
             .build());
 
-        given(restaurantService.getRestaurants("Seoul")).willReturn(restaurants);
+        given(restaurantService.getRestaurants("Seoul",1L)).willReturn(restaurants);
 
-        mvc.perform(get("/restaurants?region=Seoul")) // perform은 예외가 있음.
+        mvc.perform(get("/restaurants?region=Seoul&category=1")) // perform은 예외가 있음.
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"name\":\"JOKER House\"")))
