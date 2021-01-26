@@ -1,5 +1,6 @@
 package com.playground.noyo0123.eatgo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -42,5 +43,10 @@ public class User {
 
     public void deactivate() {
         level = 0L;
+    }
+
+    @JsonIgnore
+    public String getAccessToken() {
+        return password.substring(0,10);
     }
 }
