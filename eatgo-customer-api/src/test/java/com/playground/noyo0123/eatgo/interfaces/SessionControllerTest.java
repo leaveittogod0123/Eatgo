@@ -42,12 +42,13 @@ public class SessionControllerTest {
         String password = "test";
 
 
-        User mockUser = User.builder().name(name).id(id).password("ACCESSTOKEN").build();
+        User mockUser = User.builder().name(name).id(id).build();
 
         given(userService.authenticate(email, password))
                 .willReturn(mockUser);
 
-        given(jwtUtil.createToken(id, name)).willReturn("header.payload.signature");
+        given(jwtUtil.createToken(id, name))
+                .willReturn("header.payload.signature");
 
         mvc.perform(post("/session")
                 .contentType(MediaType.APPLICATION_JSON)
