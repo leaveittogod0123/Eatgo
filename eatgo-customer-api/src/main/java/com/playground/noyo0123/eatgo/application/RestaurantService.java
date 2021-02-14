@@ -33,7 +33,6 @@ public class RestaurantService {
 
         List<Review> reviews = reviewRepository.findAllByRestaurantId(id);
         restaurant.setReviews(reviews);
-
         return restaurant;
     }
 
