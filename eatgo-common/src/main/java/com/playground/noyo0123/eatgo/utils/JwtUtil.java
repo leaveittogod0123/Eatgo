@@ -1,9 +1,9 @@
 package com.playground.noyo0123.eatgo.utils;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.stereotype.Component;
 
 import java.security.Key;
 
@@ -17,7 +17,6 @@ public class JwtUtil {
     public JwtUtil(String secret) {
         this.secret = secret;
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
-
     }
 
     public String createToken(Long userId, String name) {
@@ -29,5 +28,13 @@ public class JwtUtil {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
         return token;
+    }
+
+    public Claims getClaims(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token) // sign이 포함된 jwt
+                .getBody();
+        return claims;
     }
 }
