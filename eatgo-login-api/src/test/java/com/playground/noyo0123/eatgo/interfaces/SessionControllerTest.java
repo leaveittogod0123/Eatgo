@@ -44,62 +44,62 @@ public class SessionControllerTest {
 
         User mockUser = User.builder().name(name).id(id).build();
 
-        given(userService.authenticate(email, password))
+        BDDMockito.given(userService.authenticate(email, password))
                 .willReturn(mockUser);
 
-        given(jwtUtil.createToken(id, name))
+        BDDMockito.given(jwtUtil.createToken(id, name))
                 .willReturn("header.payload.signature");
 
-        mvc.perform(post("/session")
+        mvc.perform(MockMvcRequestBuilders.post("/session")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"email\": \"tester@example.com\", \"password\": \"test\"}"))
-                .andExpect(status().isCreated())
-                .andExpect(header().string("location", "/session"))
-                .andExpect(content().string(containsString("{\"accessToken\":\"header.payload.signature\"}")));
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.header().string("location", "/session"))
+                .andExpect(MockMvcResultMatchers.content().string(StringContains.containsString("{\"accessToken\":\"header.payload.signature\"}")));
 
-        verify(userService).authenticate(eq(email), eq(password));
+        Mockito.verify(userService).authenticate(ArgumentMatchers.eq(email), ArgumentMatchers.eq(password));
     }
 
     @Test
     public void createWithInValidAttributes() throws Exception {
 
-        given(userService.authenticate("tester@example.com", "x"))
+        BDDMockito.given(userService.authenticate("tester@example.com", "x"))
                 .willThrow(PasswordWrongException.class);
 
-        mvc.perform(post("/session")
+        mvc.perform(MockMvcRequestBuilders.post("/session")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"email\": \"tester@example.com\", \"password\": \"x\"}"))
-                .andExpect(status().isBadRequest());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
-        verify(userService).authenticate(eq("tester@example.com"), eq("x"));
+        Mockito.verify(userService).authenticate(ArgumentMatchers.eq("tester@example.com"), ArgumentMatchers.eq("x"));
     }
 
     @Test
     public void createWithNotExistedEmail() throws Exception {
 
-        given(userService.authenticate("x@example.com", "test"))
+        BDDMockito.given(userService.authenticate("x@example.com", "test"))
                 .willThrow(EmailNotExistedException.class);
 
-        mvc.perform(post("/session")
+        mvc.perform(MockMvcRequestBuilders.post("/session")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"email\": \"x@example.com\", \"password\": \"test\"}"))
-                .andExpect(status().isBadRequest());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
-        verify(userService).authenticate(eq("x@example.com"), eq("test"));
+        Mockito.verify(userService).authenticate(ArgumentMatchers.eq("x@example.com"), ArgumentMatchers.eq("test"));
     }
 
     @Test
     public void createWithWorngPassword() throws Exception {
 
-        given(userService.authenticate("tester@example.com", "x"))
+        BDDMockito.given(userService.authenticate("tester@example.com", "x"))
                 .willThrow(PasswordWrongException.class);
 
-        mvc.perform(post("/session")
+        mvc.perform(MockMvcRequestBuilders.post("/session")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"email\": \"tester@example.com\", \"password\": \"x\"}"))
-                .andExpect(status().isBadRequest());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
 
-        verify(userService).authenticate(eq("tester@example.com"), eq("x"));
+        Mockito.verify(userService).authenticate(ArgumentMatchers.eq("tester@example.com"), ArgumentMatchers.eq("x"));
     }
 
 }
