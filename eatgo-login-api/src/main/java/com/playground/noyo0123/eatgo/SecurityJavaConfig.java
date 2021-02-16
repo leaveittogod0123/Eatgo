@@ -1,6 +1,5 @@
 package com.playground.noyo0123.eatgo;
 
-import com.playground.noyo0123.eatgo.filters.JwtAuthenticationFilter;
 import com.playground.noyo0123.eatgo.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +20,15 @@ public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
     @Value("${jwt.secret}")
     private String secret; // application.yml
 
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        http
+                .formLogin().disable()
+                .csrf().disable()
+                .cors().disable()
+                .headers().frameOptions().disable();
+    }
 
     @Bean
     public JwtUtil jwtUtil() {
