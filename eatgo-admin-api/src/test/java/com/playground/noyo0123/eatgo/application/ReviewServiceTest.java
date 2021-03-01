@@ -49,7 +49,7 @@ public class ReviewServiceTest {
     }
 
     @Test
-    public void addReivew(){
+    public void addReivew() {
         Review review = Review.builder()
                 .name("JOKER")
                 .score(3)
@@ -57,7 +57,7 @@ public class ReviewServiceTest {
                 .build();
 
         reviewService.addReview(1004L, review);
-        
+
         verify(reviewRepository).save(any());
     }
 }

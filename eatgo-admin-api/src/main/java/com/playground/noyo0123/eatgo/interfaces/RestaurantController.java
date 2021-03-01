@@ -31,20 +31,20 @@ public class RestaurantController {
     }
 
     @PostMapping("/restaurants")
-    public ResponseEntity<?> create(@Valid @RequestBody Restaurant resource ) throws URISyntaxException { // JSON으로 응답할거기때문에 ResponseEntity
+    public ResponseEntity<?> create(@Valid @RequestBody Restaurant resource) throws URISyntaxException { // JSON으로 응답할거기때문에 ResponseEntity
 
-        Restaurant restaurant =  restaurantService.addRestaurant(
+        Restaurant restaurant = restaurantService.addRestaurant(
                 Restaurant.builder()
                         .name(resource.getName())
                         .address(resource.getAddress())
                         .build());
-        
+
         URI location = new URI("/restaurants/" + restaurant.getId());
         return ResponseEntity.created(location).body("{}"); // JSON으로 넘겨줌
     }
 
     @PatchMapping("/restaurants/{id}")
-    public String update(@PathVariable("id") Long id, @Valid @RequestBody Restaurant restaurant){
+    public String update(@PathVariable("id") Long id, @Valid @RequestBody Restaurant restaurant) {
         String name = restaurant.getName();
         String address = restaurant.getAddress();
         restaurantService.updateRestaurant(id, name, address);

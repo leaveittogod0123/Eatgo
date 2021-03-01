@@ -43,7 +43,7 @@ public class ReviewControllerTest {
 
         mvc.perform(post("/restaurants/1/reviews")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer "+ token)
+                .header("Authorization", "Bearer " + token)
                 .content("{\"score\" :3, \"description\":\"Mat-it-da\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("location", "/restaurants/1/reviews/1004"));
@@ -58,6 +58,6 @@ public class ReviewControllerTest {
                 .content("{}"))
                 .andExpect(status().isBadRequest());
 
-        verify(reviewService, never()).addReview(any(), any(), any(),any());
+        verify(reviewService, never()).addReview(any(), any(), any(), any());
     }
 }

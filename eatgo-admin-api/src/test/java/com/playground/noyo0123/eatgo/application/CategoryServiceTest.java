@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-public class CategoryServiceTest  {
+public class CategoryServiceTest {
 
     private CategoryService categoryService;
 

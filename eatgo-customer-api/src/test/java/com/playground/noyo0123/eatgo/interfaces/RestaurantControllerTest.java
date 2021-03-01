@@ -38,13 +38,13 @@ public class RestaurantControllerTest {
     public void list() throws Exception {
         List<Restaurant> restaurants = new ArrayList<Restaurant>();
         restaurants.add(Restaurant.builder()
-            .id(1004L)
-            .categoryId(1L)
-            .name("JOKER House")
-            .address("Seoul")
-            .build());
+                .id(1004L)
+                .categoryId(1L)
+                .name("JOKER House")
+                .address("Seoul")
+                .build());
 
-        given(restaurantService.getRestaurants("Seoul",1L)).willReturn(restaurants);
+        given(restaurantService.getRestaurants("Seoul", 1L)).willReturn(restaurants);
 
         mvc.perform(get("/restaurants?region=Seoul&category=1")) // perform은 예외가 있음.
                 .andExpect(status().isOk())
@@ -89,8 +89,8 @@ public class RestaurantControllerTest {
                         containsString("Kimchi")
                 ))
                 .andExpect(content().string(
-                containsString("Great!")
-        ));
+                        containsString("Great!")
+                ));
 
     }
 

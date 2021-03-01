@@ -46,7 +46,7 @@ public class Restaurant {
         return this.name + " in " + this.address;
     }
 
-    public List<MenuItem> getMenuItems (){
+    public List<MenuItem> getMenuItems() {
         return this.menuItems;
     }
 

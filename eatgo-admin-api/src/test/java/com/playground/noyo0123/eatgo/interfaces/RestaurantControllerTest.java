@@ -39,11 +39,11 @@ public class RestaurantControllerTest {
     public void list() throws Exception {
         List<Restaurant> restaurants = new ArrayList<Restaurant>();
         restaurants.add(Restaurant.builder()
-            .id(1004L)
-            .name("JOKER House")
-            .categoryId(1L)
-            .address("Seoul")
-            .build());
+                .id(1004L)
+                .name("JOKER House")
+                .categoryId(1L)
+                .address("Seoul")
+                .build());
 
         given(restaurantService.getRestaurants()).willReturn(restaurants);
 
@@ -139,7 +139,6 @@ public class RestaurantControllerTest {
                 .andExpect(status().isBadRequest());
 
     }
-
 
 
 }

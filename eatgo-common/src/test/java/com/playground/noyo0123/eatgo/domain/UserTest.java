@@ -26,7 +26,7 @@ public class UserTest {
 
     @Test
     public void restaurantOwner() {
-        User user =  User.builder().level(1L).build();
+        User user = User.builder().level(1L).build();
 
         assertThat(user.isRestaurantOwner(), is(false));
 

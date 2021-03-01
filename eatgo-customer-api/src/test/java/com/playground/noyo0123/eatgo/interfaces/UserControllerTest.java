@@ -42,16 +42,16 @@ public class UserControllerTest {
                 .password("test")
                 .build();
 
-      given(userService.registerUser("tester@example.com","Tester","test"))
-        .willReturn(mockUser);
+        given(userService.registerUser("tester@example.com", "Tester", "test"))
+                .willReturn(mockUser);
 
-      mvc.perform(post("/users")
-              .contentType(MediaType.APPLICATION_JSON)
-              .content("{\"email\": \"tester@example.com\", \"name\":\"Tester\", \"password\":\"test\"}"))
-              .andExpect(status().isCreated())
-              .andExpect(header().string("location", "/users/1004"));
+        mvc.perform(post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"email\": \"tester@example.com\", \"name\":\"Tester\", \"password\":\"test\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("location", "/users/1004"));
 
-      // 실제로 userService의 로직을 수행했는지 검증
+        // 실제로 userService의 로직을 수행했는지 검증
         verify(userService).registerUser(eq("tester@example.com"), eq("Tester"), eq("test"));
     }
 }

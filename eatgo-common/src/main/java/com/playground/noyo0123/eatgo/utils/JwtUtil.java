@@ -26,7 +26,7 @@ public class JwtUtil {
         JwtBuilder builder = Jwts.builder()
                 .claim("userId", userId)
                 .claim("name", name);
-        if(restaurantId != null) {
+        if (restaurantId != null) {
             builder = builder.claim("restaurantId", restaurantId);
         }
         String token = builder

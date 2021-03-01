@@ -22,7 +22,7 @@ public class JwtUtilTest {
     @Test
     public void createToken() {
         String secret = "12345678901234567890123456789012";
-        JwtUtil jwtUtil =  new JwtUtil(secret);
+        JwtUtil jwtUtil = new JwtUtil(secret);
         String token = jwtUtil.createToken(1004L, "John", null);
         assertThat(token, containsString("."));
     }

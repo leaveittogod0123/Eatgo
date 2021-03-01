@@ -23,7 +23,7 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<?> create (@RequestBody User resource) throws URISyntaxException {
+    public ResponseEntity<?> create(@RequestBody User resource) throws URISyntaxException {
 
         String email = resource.getEmail();
         String name = resource.getName();
@@ -44,7 +44,7 @@ public class UserController {
 
     @DeleteMapping("/users/{id}")
     public String delete(@PathVariable("id") Long id) {
-                userService.deactivateUser(id);
+        userService.deactivateUser(id);
         return "{}";
     }
 

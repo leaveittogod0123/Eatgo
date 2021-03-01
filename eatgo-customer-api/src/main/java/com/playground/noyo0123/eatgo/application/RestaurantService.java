@@ -24,7 +24,7 @@ public class RestaurantService {
         this.reviewRepository = reviewRepository;
     }
 
-    public Restaurant getRestaurant (Long id) {
+    public Restaurant getRestaurant(Long id) {
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new RestaurantNotFoundException(id));
 
@@ -37,7 +37,7 @@ public class RestaurantService {
     }
 
     public List<Restaurant> getRestaurants(String region, long categoryId) {
-        return restaurantRepository.findAllByAddressContainingAndCategoryId(region,categoryId);
+        return restaurantRepository.findAllByAddressContainingAndCategoryId(region, categoryId);
     }
 
 
@@ -50,7 +50,7 @@ public class RestaurantService {
         // TODO: update Restaurants...
 
 
-        Restaurant restaurant =  restaurantRepository.findById(id).orElse(null);
+        Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
         restaurant.updateInformation(name, address);
         return restaurant;
     }

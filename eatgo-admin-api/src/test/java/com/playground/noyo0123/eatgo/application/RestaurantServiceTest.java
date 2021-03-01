@@ -24,7 +24,7 @@ public class RestaurantServiceTest {
     private RestaurantRepository restaurantRepository;
 
     @Before
-    public void setUp(){
+    public void setUp() {
 
         MockitoAnnotations.initMocks(this);
 
@@ -37,11 +37,11 @@ public class RestaurantServiceTest {
     private void mockRestaurantRepository() {
         List<Restaurant> restaurants = new ArrayList<>();
         Restaurant restaurant = Restaurant.builder()
-            .id(1004L)
-            .categoryId(1L)
-            .name("Bob zip")
-            .address("Seoul")
-            .build();
+                .id(1004L)
+                .categoryId(1L)
+                .name("Bob zip")
+                .address("Seoul")
+                .build();
 
         restaurants.add(restaurant);
         given(restaurantRepository.findAll())
@@ -97,15 +97,14 @@ public class RestaurantServiceTest {
         });
 
 
-
         Restaurant restaurant = Restaurant.builder()
-            .name("BeRyong")
-            .address("Busan").build();
+                .name("BeRyong")
+                .address("Busan").build();
         Restaurant saved = Restaurant.builder()
-            .id(1234L)
-            .name("BeRyong")
-            .address("Busan")
-            .build();
+                .id(1234L)
+                .name("BeRyong")
+                .address("Busan")
+                .build();
         Restaurant created = restaurantService.addRestaurant(restaurant);
         assertThat(created.getId(), is(1234L));
     }

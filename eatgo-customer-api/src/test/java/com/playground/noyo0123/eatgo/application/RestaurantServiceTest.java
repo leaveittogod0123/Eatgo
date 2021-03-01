@@ -32,7 +32,7 @@ public class RestaurantServiceTest {
     private ReviewRepository reviewRepository;
 
     @Before
-    public void setUp(){
+    public void setUp() {
 
         MockitoAnnotations.initMocks(this);
 
@@ -47,10 +47,10 @@ public class RestaurantServiceTest {
     private void mockReviewRepository() {
         List<Review> reviews = new ArrayList<>();
         reviews.add(Review.builder()
-            .name("BeRyong")
-            .score(1)
-            .description("Bad")
-            .build());
+                .name("BeRyong")
+                .score(1)
+                .description("Bad")
+                .build());
 
         given(reviewRepository.findAllByRestaurantId(1004L)).willReturn(reviews);
     }
@@ -58,18 +58,18 @@ public class RestaurantServiceTest {
     private void mockMenuItemRepository() {
         List<MenuItem> menuItems = new ArrayList<>();
         menuItems.add(MenuItem.builder()
-            .name("Kimchi").build());
+                .name("Kimchi").build());
         given(menuItemRepository.findAllByRestaurantId(1004L)).willReturn(menuItems);
     }
 
     private void mockRestaurantRepository() {
         List<Restaurant> restaurants = new ArrayList<>();
         Restaurant restaurant = Restaurant.builder()
-            .id(1004L)
-            .categoryId(1L)
-            .name("Bob zip")
-            .address("Seoul")
-            .build();
+                .id(1004L)
+                .categoryId(1L)
+                .name("Bob zip")
+                .address("Seoul")
+                .build();
 
         restaurants.add(restaurant);
         given(restaurantRepository.findAllByAddressContainingAndCategoryId("Seoul", 1L))
@@ -127,15 +127,14 @@ public class RestaurantServiceTest {
         });
 
 
-
         Restaurant restaurant = Restaurant.builder()
-            .name("BeRyong")
-            .address("Busan").build();
+                .name("BeRyong")
+                .address("Busan").build();
         Restaurant saved = Restaurant.builder()
-            .id(1234L)
-            .name("BeRyong")
-            .address("Busan")
-            .build();
+                .id(1234L)
+                .name("BeRyong")
+                .address("Busan")
+                .build();
         Restaurant created = restaurantService.addRestaurant(restaurant);
         assertThat(created.getId(), is(1234L));
     }
