@@ -12,7 +12,7 @@ public class CategoryService {
     public CategoryRepository categoryRepository;
 
     @Autowired
-    public CategoryService(CategoryRepository categoryRepository){
+    public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 

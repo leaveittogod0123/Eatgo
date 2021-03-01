@@ -55,7 +55,7 @@ public class UserServiceTest {
         String name = "Administrator";
 
         User mockUser = User.builder().email(email).name(name).build();
-        
+
         given(userRepository.save(any())).willReturn(mockUser);
 
         User user = userService.addUser(email, name);

@@ -36,13 +36,13 @@ public class UserServiceTest {
     }
 
     @Test
-    public void registerUser(){
-    String email = "tester3@example.com";
-    String name = "Tester";
-    String password = "test";
+    public void registerUser() {
+        String email = "tester3@example.com";
+        String name = "Tester";
+        String password = "test";
 
-    userService.registerUser(email, name, password);
-    verify(userRepository).save(any());
+        userService.registerUser(email, name, password);
+        verify(userRepository).save(any());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class UserServiceTest {
 
         given(passwordEncoder.matches(any(), any())).willReturn(true);
 
-        User user =userService.authenticate(email, password);
+        User user = userService.authenticate(email, password);
         assertThat(user.getEmail(), is(email)); // org.junit is.is
     }
 

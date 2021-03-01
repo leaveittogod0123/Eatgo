@@ -16,7 +16,8 @@ import javax.persistence.Id;
 @NoArgsConstructor
 public class Region {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     private String name;

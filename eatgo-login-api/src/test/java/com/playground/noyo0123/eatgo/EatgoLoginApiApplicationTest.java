@@ -12,5 +12,6 @@ import static org.junit.Assert.*;
 public class EatgoLoginApiApplicationTest {
 
     @Test
-    public void contextLoads(){}
+    public void contextLoads() {
+    }
 }

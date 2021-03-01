@@ -46,7 +46,7 @@ public class UserServiceTest {
 
         given(passwordEncoder.matches(any(), any())).willReturn(true);
 
-        User user =userService.authenticate(email, password);
+        User user = userService.authenticate(email, password);
         assertThat(user.getEmail(), is(email)); // org.junit is.is
     }
 

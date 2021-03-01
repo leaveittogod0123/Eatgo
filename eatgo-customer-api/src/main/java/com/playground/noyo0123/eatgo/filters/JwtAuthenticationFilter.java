@@ -31,7 +31,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         // TODO: JWT 분석
         Authentication authentication = getAuthentication(request);
 
-        if( authentication != null ){
+        if (authentication != null) {
             SecurityContext context = SecurityContextHolder.getContext();
             context.setAuthentication(authentication);
         }
@@ -40,7 +40,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
     private Authentication getAuthentication(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        if( token == null) {
+        if (token == null) {
             return null;
         }
 
@@ -48,6 +48,6 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         // TODO: JwtUtil에서 claims 얻기
         Claims claims = jwtUtil.getClaims(token.substring("Bearer ".length()));
         Authentication authentication = new UsernamePasswordAuthenticationToken(claims, null);
-        return  authentication;
+        return authentication;
     }
 }
