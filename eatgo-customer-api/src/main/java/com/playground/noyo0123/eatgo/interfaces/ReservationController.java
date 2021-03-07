@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -21,7 +22,7 @@ public class ReservationController {
     private ReservationService reservationService;
 
     @PostMapping("/restaurants/{restaurantId}/reservations")
-    public ResponseEntity<?> create(Authentication authentication, @PathVariable Long restaurantId, @RequestBody Reservation resource) throws URISyntaxException {
+    public ResponseEntity<?> create(Authentication authentication, @PathVariable Long restaurantId, @Valid @RequestBody Reservation resource) throws URISyntaxException {
         Claims claims = (Claims) authentication.getPrincipal();
 
         Long userId = claims.get("userId", Long.class);

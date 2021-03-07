@@ -31,6 +31,8 @@ public class Reservation {
     @NotEmpty
     private String time;
 
+    private Long restaurantId;
+
     @Setter
     @NotNull
     private Integer partySize;
